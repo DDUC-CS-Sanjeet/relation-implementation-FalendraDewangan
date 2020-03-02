@@ -388,7 +388,7 @@ class MyRelation
             cout<<"{";
             for(int i=0;i<n;i++)
             {
-                for(int j=0;j<2*n;j++)
+                for(int j=0;j<n;j++)
                 {
                     if(copy1[i][j]==1)
                         cout<<"("<<s1[i]<<","<<s1[j]<<"),";
