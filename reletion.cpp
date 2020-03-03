@@ -15,18 +15,18 @@ class MyRelation
     T *r;
     int n,m=-1,size;
 
-    MyRelation(int a,int size)
+    MyRelation(int a,int si)
     {
         n=a;
         s1=new T[n];
         inputSet();
-		this->size=2*size;
+		this->size=(2*si);
         r=new T[size];
         result=new int*[n];
 
         for(int i=0;i<n;i++)
         {
-            result[i]=new int[m];
+            result[i]=new int[n];
         }
         cout<<"enter your relation is : "<<endl;
         inputRelation();
@@ -49,12 +49,10 @@ class MyRelation
         inputSet();
         cout<<"enter your relation is "<<endl;
         inputRelation();
-        set01();
     }
 
     void set01()
     {
-    	bool t=true;
         //0-1 in matrix
         
         for(int i=0;i<n;i++)
@@ -72,14 +70,8 @@ class MyRelation
         				result[i][j]=0;
 				}
 			}
-		}        
-        
-        int copy1[n][m];
-        for(int i=0;i<n;i++)
-        {
-            for(int j=0;j<m;j++)
-            	copy1[i][j]=result[i][j];
-        }
+		}
+
     }
     
     void reflexive()
@@ -103,10 +95,10 @@ class MyRelation
     void symmetric()
     {
         sym=true;
-        int copy1[n][m];
+        int copy1[n][n];
         for(int i=0;i<n;i++)
         {
-            for(int j=0;j<m;j++)
+            for(int j=0;j<n;j++)
             {
                  copy1[i][j]=result[i][j];
             }
@@ -115,7 +107,7 @@ class MyRelation
         }
         for(int i=0;i<n;i++)
         {
-            for(int j=0;j<m;j++)
+            for(int j=0;j<n;j++)
             {
                 if(i!=j)
                 {
@@ -139,10 +131,10 @@ class MyRelation
     void antisymmetric()
     {
         ants=true;
-        int copy1[n][m];
+        int copy1[n][n];
         for(int i=0;i<n;i++)
         {
-            for(int j=0;j<m;j++)
+            for(int j=0;j<n;j++)
             {
                  copy1[i][j]=result[i][j];
             }
@@ -151,7 +143,7 @@ class MyRelation
         }
         for(int i=0;i<n;i++)
         {
-            for(int j=0;j<m;j++)
+            for(int j=0;j<n;j++)
             {
                 if(i!=j)
                 {
@@ -178,6 +170,23 @@ class MyRelation
         cout<<"Enter your first set"<<endl;
         for(int i=0;i<n;i++)
             cin>>s1[i];
+        
+        for(int i=0;i<n;i++)
+        {
+            for(int j=i+1;j<n;)
+            {
+                if(s1[i]==s1[j])
+                {
+                    for(int k=j;k<n-1;k++)
+                    {
+                        s1[k]=s1[k+1];
+                    }
+                    n--;
+                }
+                else
+                    j++;
+            }
+        }
         cout<<"Your one set is "<<endl;
         cout<<"{";
         for(int i=0;i<n;i++)
@@ -190,12 +199,28 @@ class MyRelation
         
         if(m>0)
         {
-            cout<<"Enter your first set"<<endl;
-            for(int i=0;i<n;i++)
+            cout<<"Enter your second set"<<endl;
+            for(int i=0;i<m;i++)
                 cin>>s2[i];
+        for(int i=0;i<m;i++)
+        {
+            for(int j=i+1;j<m;)
+            {
+                if(s1[i]==s1[j])
+                {
+                    for(int k=j;k<m-1;k++)
+                    {
+                        s2[k]=s2[k+1];
+                    }
+                    m--;
+                }
+                else
+                    j++;
+            }
+        }
             cout<<"Your second set is "<<endl;
             cout<<"{";
-            for(int i=0;i<n;i++)
+            for(int i=0;i<m;i++)
             {
                cout<<s2[i];
                if(i<n-1)
@@ -203,16 +228,11 @@ class MyRelation
             }
             cout<<"}"<<endl;
         }
-        else 
-        {
-        	m=n;
-		}
-
     }
 
     void inputRelation()
     {
-        for(int i=0;i<2*n;i++)
+        for(int i=0;i<size;i++)
         {
                 cin>>r[i];
         }
@@ -303,19 +323,19 @@ class MyRelation
     void transitive()
     {
         tra=true;
-        int copy1[n][m];
+        int copy1[n][n];
         for(int i=0;i<n;i++)
         {
-            for(int j=0;j<m;j++)
+            for(int j=0;j<n;j++)
                 copy1[i][j]=result[i][j];
         }
         for(int i=0;i<n;i++)
         {
-            for(int j=0;j<m;j++)
+            for(int j=0;j<n;j++)
             {
                 if(copy1[i][j]==1)
                 {
-                    for(int k=0;k<m;k++)
+                    for(int k=0;k<n;k++)
                     {
                         if(copy1[j][k]==1)
                         {
@@ -342,72 +362,11 @@ class MyRelation
 
     void transitiveExtension()
     {
-        int copy1[n][m];
+        int copy1[n][n];
+        int copy2[n][n];
         for(int i=0;i<n;i++)
         {
-            for(int j=0;j<m;j++)
-                copy1[i][j]=result[i][j];
-        }
-        
-        int copy2[n][m];
-        for(int i=0;i<n;i++)
-        {
-            for(int j=0;j<m;j++)
-                copy2[i][j]=copy1[i][j];
-        }
-
-        if(!tra)
-        {
-        	cout<<"your transitive closure of relation by  is: ";
-            int z=0;
-            while(z<n)
-            {
-                for(int i=0;i<n;i++)
-                {
-                for(int j=0;j<m;j++)
-                {
-                    if(copy1[i][j]==1)
-                    {
-                        for(int k=0;k<m;k++)
-                        {
-                            if(copy1[j][k]==1)
-                            {
-                                copy2[i][k]=1;
-                            }
-                        }
-                    }
-                }
-                }
-                for(int i=0;i<n;i++)
-                {
-                    for(int j=0;j<m;j++)
-                        copy1[i][j]=copy2[i][j];
-                }
-                z++;
-            }
-            cout<<"{";
-            for(int i=0;i<n;i++)
-            {
-                for(int j=0;j<n;j++)
-                {
-                    if(copy1[i][j]==1)
-                        cout<<"("<<s1[i]<<","<<s1[j]<<"),";
-                }
-            }
-            cout<<"}"<<endl;
-        }
-        else    
-            cout<<"no transitive closure , It is a transitive relation "<<endl;
-    }
-
-
-    void warshall()
-    {
-        int copy1[n][m];
-        int copy2[n][m];
-        for(int i=0;i<n;i++)
-        {
-            for(int j=0;j<m;j++)
+            for(int j=0;j<n;j++)
             {
                 copy1[i][j]=result[i][j];
                 copy2[i][j]=result[i][j];            	
@@ -417,7 +376,7 @@ class MyRelation
 
         if(!tra)
         {
-        	cout<<"Your transitive closure of relation by warshall's method is: ";
+        	cout<<"Your transitive closure of relation by transitive extension is: ";
             int z=0;
             while(z<n)
             {
@@ -427,7 +386,7 @@ class MyRelation
                 {
                     if(copy1[i][j]==1)
                     {
-                        for(int k=0;k<m;k++)
+                        for(int k=0;k<n;k++)
                         {
                             if(copy1[j][k]==1)
                             {
@@ -457,7 +416,64 @@ class MyRelation
             cout<<"}"<<endl;
         }
         else    
-            cout<<"no transitive closure , It is a transitive relation "<<endl;
+            cout<<"no transitive closure , It is a transitive relation : by transitive extension "<<endl;
+    }
+
+
+    void warshall()
+    {
+        int copy1[n][n];
+        int copy2[n][n];
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                copy1[i][j]=result[i][j];
+                copy2[i][j]=result[i][j];            	
+			}
+
+        }
+
+        if(!tra)
+        {
+            cout<<"your trsnsitive closure of relation by warshall algorithm is : ";
+            for(int i=0;i<n;i++)
+            {
+                for(int j=0;j<n;j++)
+                {
+                    if(copy1[j][i]==1)
+                    {
+                        for(int k=0;k<n;k++)
+                        {
+                            if(copy1[i][k]==1)
+                            {
+                                copy2[j][k]=1;
+                            }
+                        }
+                    }
+                }
+            for(int i=0;i<n;i++)
+            {
+                for(int j=0;j<n;j++)
+                    copy1[i][j]=copy2[i][j];
+            }
+            
+            }
+
+                        cout<<"{";
+            for(int i=0;i<n;i++)
+            {
+                for(int j=0;j<n;j++)
+                {
+                    if(copy1[i][j]==1)
+                        cout<<"("<<s1[i]<<","<<s1[j]<<"),";
+
+                }
+            }
+            cout<<"}"<<endl;
+        }
+        else 
+            cout<<"no transitive closure , It is a transitive relation : by warshall algorithm "<<endl;
 
     }
     void partialOrder()
@@ -490,18 +506,23 @@ void set(T a)
             cin>>size;
             MyRelation<T> a(n,size);
             a.reflexive();
+            cout<<endl;
             a.symmetric();
+            cout<<endl;
             a.antisymmetric();
+            cout<<endl;
             a.transitive();
+            cout<<endl;
             a.reflexiveClosure();
+            cout<<endl;
             a.symmetricClosure();
-            cout<<"transitive closure by warshall algorithm "<<endl;
+            cout<<endl;
             a.warshall();
             cout<<endl;
-            cout<<"transitive closure by transitive extension "<<endl;
             a.transitiveExtension();
             cout<<endl;
             a.equivalence();
+            cout<<endl;
             a.partialOrder();
 
         }
@@ -566,4 +587,3 @@ int main()
     }while(h=='y');
     return 0;
 }
-
